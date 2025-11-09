@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "nombre": "Camiseta Básica",
+        "precio": 25000,
+        "categoria": "Ropa",
+        "descripcion": "Camiseta 100% algodón de alta calidad",
+        "imagen": "assets/images/camiseta.jpg",
+        "colores": ["Negro", "Blanco", "Azul"],
+        "talles": ["S", "M", "L", "XL"],
+        "stock": 50
+    },
+    {
+        "id": 2,
+        "nombre": "Jeans Clásicos",
+        "precio": 89000,
+        "categoria": "Ropa",
+        "descripcion": "Jeans ajustados de mezclilla premium",
+        "imagen": "assets/images/jeans.jpg",
+        "colores": ["Azul", "Negro"],
+        "talles": ["28", "30", "32", "34", "36", "38", "40"],
+        "stock": 25
+    },
+    {
+        "id": 3,
+        "nombre": "Zapatos Deportivos",
+        "precio": 120000,
+        "categoria": "Calzado",
+        "descripcion": "Zapatos deportivos para running y ejercicio",
+        "imagen": "assets/images/zapatos.jpg",
+        "colores": ["Blanco", "Negro", "Rojo"],
+        "talles": ["38", "39", "40", "41", "42", "43", "44"],
+        "stock": 30
+    },
+    {
+        "id": 4,
+        "nombre": "Bolso Casual",
+        "precio": 45000,
+        "categoria": "Accesorios",
+        "descripcion": "Bolso casual perfecto para el día a día",
+        "imagen": "assets/images/bolso.jpg",
+        "colores": ["Negro", "Marrón", "Beige"],
+        "talles": ["Único"],
+        "stock": 15
+    }
+]
