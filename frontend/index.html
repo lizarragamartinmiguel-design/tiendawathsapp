@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda WhatsApp - Venta de Productos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -20,11 +20,15 @@
                 <a href="#productos">Productos</a>
                 <a href="#como-comprar">Cómo Comprar</a>
                 <a href="#contacto">Contacto</a>
+                <!-- BOTÓN ADMIN CORREGIDO -->
+                <a href="/admin.html" class="btn-admin">
+                    <i class="fas fa-cog"></i> Admin
+                </a>
+                <div class="cart-icon" id="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </div>
             </nav>
-            <div class="cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span id="cart-count">0</span>
-            </div>
         </div>
     </header>
 
@@ -39,14 +43,15 @@
                         <i class="fas fa-shopping-bag"></i>
                         Ver Productos
                     </button>
-                    <a href="https://wa.me/TUNUMERO" class="btn btn-whatsapp" target="_blank">
+                    <button class="btn btn-whatsapp" onclick="sendOrderToWhatsApp()">
                         <i class="fab fa-whatsapp"></i>
                         Comprar por WhatsApp
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="hero-image">
-                <img src="assets/images/hero-shop.png" alt="Tienda Online">
+                <!-- Imagen placeholder -->
+                <div style="font-size: 8rem; color: white;">🛍️</div>
             </div>
         </div>
     </section>
@@ -56,7 +61,7 @@
         <div class="container">
             <h2>Nuestros Productos</h2>
             <div class="products-grid" id="products-grid">
-                <!-- Los productos se cargan dinámicamente -->
+                <!-- Los productos se cargan dinámicamente desde el admin -->
             </div>
         </div>
     </section>
@@ -65,30 +70,24 @@
     <div class="cart-floating" id="cart-floating">
         <div class="cart-header">
             <h3>Tu Carrito</h3>
-            <button class="close-cart" onclick="toggleCart()">
+            <button class="close-cart" id="close-cart">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="cart-items" id="cart-items">
             <!-- Items del carrito -->
         </div>
-        <div class="cart-total">
-            <strong>Total: $<span id="cart-total">0</span></strong>
+        <div class="cart-total" id="cart-total-element">
+            Total: $<span id="cart-total">0.00</span>
         </div>
         <div class="cart-actions">
-            <button class="btn btn-whatsapp btn-full" onclick="enviarPedidoWhatsApp()">
+            <button class="btn btn-whatsapp btn-full" onclick="sendOrderToWhatsApp()">
                 <i class="fab fa-whatsapp"></i>
                 Enviar Pedido por WhatsApp
             </button>
         </div>
     </div>
-    <!-- En el header, después del carrito -->
-    <div class="admin-access">
-    <a href="/admin" class="btn-admin">
-        <i class="fas fa-cog"></i>
-        Admin
-    </a>
-    </div>
+
     <!-- Cómo Comprar -->
     <section id="como-comprar" class="how-to-buy">
         <div class="container">
@@ -135,7 +134,7 @@
                     <i class="fab fa-whatsapp"></i>
                     <div>
                         <h3>WhatsApp</h3>
-                        <p>+1 234 567 8900</p>
+                        <p id="whatsapp-contact">+1 234 567 8900</p>
                         <small>Horario: Lunes a Viernes 9:00 - 18:00</small>
                     </div>
                 </div>
@@ -153,10 +152,10 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 TiendaWhatsApp. Todos los derechos reservados.</p>
+            <p>&copy; 2024 <span id="footer-store-name">TiendaWhatsApp</span>. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <script src="app.js"></script>
+    <script src="/js/app.js"></script>
 </body>
 </html>
