@@ -6,6 +6,9 @@ const ADMIN_CREDENTIALS = {
     password: 'admin123' // ¡Cambia esta contraseña!
 };
 
+// 🟢 BACKEND EN RENDER
+const API_URL = 'https://tiendawhatsapp-backend.onrender.com';
+
 // =============================================
 // ESTADO DEL PANEL ADMIN
 // =============================================
@@ -67,6 +70,18 @@ const adminElements = {
 };
 
 // =============================================
+// EMITIR CAMBIOS A TODOS LOS CLIENTES
+// =============================================
+async function emitProductsUpdated() {
+    try {
+        await fetch(`${API_URL}/api/emit-products-update`, { method: 'POST' });
+        console.log('✅ Evento products:updated emitido');
+    } catch (err) {
+        console.warn('⚠️ No se pudo emitir el evento:', err);
+    }
+}
+
+// =============================================
 // FUNCIONES DE AUTENTICACIÓN MEJORADAS
 // =============================================
 function handleLogin(e) {
@@ -75,7 +90,6 @@ function handleLogin(e) {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     
-    // Validaciones básicas
     if (!username) {
         showLoginAlert('Por favor ingresa el usuario');
         document.getElementById('username').focus();
@@ -88,34 +102,23 @@ function handleLogin(e) {
         return;
     }
     
-    // Verificación de credenciales
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        // Login exitoso
         adminState.isLoggedIn = true;
         localStorage.setItem('adminLoggedIn', 'true');
         localStorage.setItem('adminSession', Date.now().toString());
         
         showAdminPanel();
         showAlert('Sesión iniciada correctamente', 'success');
-        
-        // Limpiar el formulario
         adminElements.loginForm.reset();
-        
     } else {
-        // Login fallido
         showLoginAlert('Usuario o contraseña incorrectos');
-        
-        // Efecto visual de error
         const passwordInput = document.getElementById('password');
         passwordInput.style.borderColor = '#dc3545';
         passwordInput.style.animation = 'shake 0.5s';
-        
         setTimeout(() => {
             passwordInput.style.animation = '';
             passwordInput.style.borderColor = '';
         }, 500);
-        
-        // Limpiar contraseña y dar foco
         passwordInput.value = '';
         passwordInput.focus();
     }
@@ -136,15 +139,12 @@ function checkExistingSession() {
     const sessionTime = localStorage.getItem('adminSession');
     
     if (savedLogin === 'true' && sessionTime) {
-        // Verificar si la sesión es reciente (menos de 24 horas)
         const sessionAge = Date.now() - parseInt(sessionTime);
-        const maxSessionAge = 24 * 60 * 60 * 1000; // 24 horas
-        
+        const maxSessionAge = 24 * 60 * 60 * 1000;
         if (sessionAge < maxSessionAge) {
             adminState.isLoggedIn = true;
             return true;
         } else {
-            // Sesión expirada
             localStorage.removeItem('adminLoggedIn');
             localStorage.removeItem('adminSession');
             showLoginAlert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
@@ -163,8 +163,6 @@ function showLoginPanel() {
     adminElements.loginSection.style.display = 'block';
     adminElements.adminPanel.style.display = 'none';
     adminElements.loginForm.reset();
-    
-    // Dar foco al campo de usuario
     setTimeout(() => {
         document.getElementById('username').focus();
     }, 100);
@@ -199,17 +197,16 @@ function handleProductSubmit(e) {
     };
     
     if (adminElements.productId.value) {
-        // Editar producto existente
         const index = adminState.products.findIndex(p => p.id == adminElements.productId.value);
         if (index !== -1) {
             adminState.products[index] = productData;
         }
     } else {
-        // Agregar nuevo producto
         adminState.products.push(productData);
     }
     
     saveProducts();
+    emitProductsUpdated(); // ← WebSocket a todos los clientes
     renderAdminProducts();
     hideProductForm();
     showAlert('Producto guardado correctamente', 'success');
@@ -239,6 +236,7 @@ function deleteProduct(productId) {
     if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
         adminState.products = adminState.products.filter(p => p.id != productId);
         saveProducts();
+        emitProductsUpdated(); // ← WebSocket a todos los clientes
         renderAdminProducts();
         showAlert('Producto eliminado correctamente', 'success');
     }
@@ -496,7 +494,6 @@ function hideImagePreview() {
 function initAdmin() {
     console.log('🔐 Inicializando panel admin...');
     
-    // Verificar sesión existente
     if (checkExistingSession()) {
         showAdminPanel();
         console.log('✅ Sesión existente encontrada');
@@ -505,7 +502,6 @@ function initAdmin() {
         console.log('🔒 Mostrando pantalla de login');
     }
     
-    // Event listeners
     if (adminElements.loginForm) {
         adminElements.loginForm.addEventListener('submit', handleLogin);
     }
@@ -534,9 +530,7 @@ function initAdmin() {
         adminElements.storeConfigForm.addEventListener('submit', handleStoreConfig);
     }
     
-    // Setup image upload
     setupImageUpload();
-    
     console.log('✅ Panel Admin inicializado correctamente');
 }
 
